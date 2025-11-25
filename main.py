@@ -1,6 +1,8 @@
 from __future__ import annotations
+from queue import Queue
 
 BOARD_LENGTH = 3
+ALLOW_PLACING_ON_JUST_REMOVED = False
 
 class Square:
     def __init__(self, row: int, col: int):
@@ -28,6 +30,37 @@ class BB:
         bb = BB(set())
         bb.val = self.val
         return bb
+    @staticmethod
+    def combine(first: BB, second: BB) -> BB:
+        bb = BB(set())
+        bb.val = first.val | second.val
+        return bb
+    def empty_squares(self) -> list[Square]:
+        pass # todo
+
+
+
+"""
+For a given state, the next item in the queue will be removed after a new move is played by that side.
+"""
+class State:
+    def __init__(self, X_BB: BB, O_BB: BB, is_X_turn: bool, recycleQueue: Queue[Square]) -> None:
+        self.X_BB = X_BB
+        self.O_BB = O_BB
+        self.is_X_turn = is_X_turn
+        self.recycleQueue = recycleQueue
+    
+    def compute_children(self) -> list[State]:
+        recycle_square = self.recycleQueue.get() # also pops
+        if self.is_X_turn:
+            (base_X_BB := self.X_BB.copy()).toggle(recycle_square)
+            base_O_BB = self.O_BB.copy()
+        else:
+            (base_O_BB := self.O_BB.copy()).toggle(recycle_square)
+            base_X_BB = self.X_BB.copy()
+        # todo - continue here
+        
+        
     
 """
 all inclusive
