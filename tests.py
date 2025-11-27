@@ -14,3 +14,7 @@ bb.toggle(Square(1, 1))
 assert not bb.won()
 bb.toggle(Square(0, 0))
 assert bb.won()
+
+expected_occupied = [Square(2, 2), Square(2, 0), Square(1, 1), Square(0, 0)]
+
+print("empty squares:", {f"{s.row}, {s.col}" for s in bb.empty_squares()})
